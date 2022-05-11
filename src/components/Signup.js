@@ -22,6 +22,8 @@ function Signup() {
     setLoading(true);
     try {
       await signup(emailRef.current.value, passwordRef.current.value);
+      sessionStorage.setItem('firstName', firstNameRef.current.value);
+      sessionStorage.setItem('lastName', lastNameRef.current.value);
       navigate('/dashboard');
     } catch {
       setError('Sign Up Error');

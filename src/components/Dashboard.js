@@ -12,6 +12,7 @@ function Dashboard() {
   const weightRef = useRef();
   const heightRef = useRef();
   const ageRef = useRef();
+  const [male, setMale] = useState(false);
 
   async function handleLogout(e) {
     e.preventDefault();
@@ -36,18 +37,30 @@ function Dashboard() {
     setLoading(false);
   }
 
+  function changeInMale() {
+    setMale(true);
+  }
+
+  function changeInFemale() {
+    setMale(false);
+  }
+
   function useSessionStorage() {
     sessionStorage.setItem('email', JSON.stringify(currentUser.email));
     sessionStorage.setItem('weight', JSON.stringify(weightRef.current.value));
     sessionStorage.setItem('height', JSON.stringify(heightRef.current.value));
     sessionStorage.setItem('age', JSON.stringify(ageRef.current.value));
+    if (male === true)
+      sessionStorage.setItem('gender', JSON.stringify('Male'));
+    else
+      sessionStorage.setItem('gender', JSON.stringify('Female'));
   }
 
   return (
     <div>
       <Card>
         <Card.Body>
-          <h2 className='text-center mb-4'>Profile</h2>
+          <h2 className='text-center mb-4'>Set Profile</h2>
           {error && <Alert variant='danger'>{error}</Alert>}
           <div className='mb-4'>
             <strong>Email:</strong> {currentUser.email}
@@ -73,6 +86,7 @@ function Dashboard() {
                 name='group1'
                 type={'radio'}
                 id={'inline-radio-1'}
+                onChange={changeInMale}
               />
               <Form.Check
                 inline
@@ -80,6 +94,7 @@ function Dashboard() {
                 name='group1'
                 type={'radio'}
                 id={'inline-radio-2'}
+                onChange={changeInFemale}
               />
             </div>
             <Button
