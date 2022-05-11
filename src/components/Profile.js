@@ -1,6 +1,7 @@
 import React from 'react'
-import { Card} from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 import ProfileElement from './ProfileElement';
+import { useNavigate } from 'react-router-dom';
 
 function Profile() {
   const email = sessionStorage.getItem('email');
@@ -10,6 +11,11 @@ function Profile() {
   const gender = sessionStorage.getItem('gender');
   const firstName = sessionStorage.getItem('firstName');
   const lastName = sessionStorage.getItem('lastName');
+  const navigate = useNavigate();
+
+  function editProfile() {
+    navigate('/dashboard');
+  }
 
   return (
     <div>
@@ -25,6 +31,12 @@ function Profile() {
           <ProfileElement weight={weight} />
           <ProfileElement height={height} />
           <ProfileElement gender={gender} />
+          <Button onClick={editProfile}
+            className='btn btn-primary w-100 mt-3'
+            type='submit'
+          >
+            Update Profile
+          </Button>
         </Card.Body>
       </Card>
     </div>

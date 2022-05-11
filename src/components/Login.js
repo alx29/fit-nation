@@ -17,7 +17,7 @@ function Login() {
     setError('');
     try {
       await login(emailRef.current.value, passwordRef.current.value);
-      navigate('/dashboard');
+      navigate('/profile');
     } catch {
       setError('Incorrect email or password');
     }
