@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Card, Button, Alert, Form } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { logout } from '../firebase';
 
@@ -36,11 +36,11 @@ function Dashboard() {
     setLoading(false);
   }
 
-  function useLocalStorage() {
-    localStorage.setItem('email', JSON.stringify(currentUser.email));
-    localStorage.setItem('weight', JSON.stringify(weightRef.current.value));
-    localStorage.setItem('height', JSON.stringify(heightRef.current.value));
-    localStorage.setItem('age', JSON.stringify(ageRef.current.value));
+  function useSessionStorage() {
+    sessionStorage.setItem('email', JSON.stringify(currentUser.email));
+    sessionStorage.setItem('weight', JSON.stringify(weightRef.current.value));
+    sessionStorage.setItem('height', JSON.stringify(heightRef.current.value));
+    sessionStorage.setItem('age', JSON.stringify(ageRef.current.value));
   }
 
   return (
@@ -65,7 +65,29 @@ function Dashboard() {
               <Form.Label>Age</Form.Label>
               <Form.Control type='text' ref={ageRef} required />
             </Form.Group>
-            <Button onClick={useLocalStorage} disabled={loading} className='btn btn-primary w-100 mt-3' type='submit'>
+            <div key={'inline-radio'} className='mt-4'>
+              Gender:&nbsp;&nbsp;&nbsp;
+              <Form.Check
+                inline
+                label='Male'
+                name='group1'
+                type={'radio'}
+                id={'inline-radio-1'}
+              />
+              <Form.Check
+                inline
+                label='Female'
+                name='group1'
+                type={'radio'}
+                id={'inline-radio-2'}
+              />
+            </div>
+            <Button
+              onClick={useSessionStorage}
+              disabled={loading}
+              className='btn btn-primary w-100 mt-3'
+              type='submit'
+            >
               Update Profile
             </Button>
           </Form>

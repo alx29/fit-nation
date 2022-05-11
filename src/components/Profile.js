@@ -1,11 +1,10 @@
 import React from 'react'
 
 function Profile() {
-  const email = localStorage.getItem('email');
-  const age = localStorage.getItem('age');
-  const weight = localStorage.getItem('weight');
-  const height = localStorage.getItem('height');
-
+  const email = sessionStorage.getItem('email');
+  const age = sessionStorage.getItem('age');
+  const weight = sessionStorage.getItem('weight');
+  const height = sessionStorage.getItem('height');
 
   return (
     <div>{email} { age }</div>
