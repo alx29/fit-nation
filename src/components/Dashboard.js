@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Card, Button, Alert, Form } from 'react-bootstrap';
+import { Card, Button, Alert, Form, Navbar, Container, Nav } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { logout } from '../firebase';
@@ -13,6 +13,16 @@ function Dashboard() {
   const heightRef = useRef();
   const ageRef = useRef();
   const [male, setMale] = useState(false);
+
+  function goHome(e) {
+    e.preventDefault();
+    navigate('/profile');
+  }
+
+  function goToProfile(e) {
+    e.preventDefault();
+    navigate('/profile');
+  }
 
   async function handleLogout(e) {
     e.preventDefault();
@@ -56,8 +66,24 @@ function Dashboard() {
       sessionStorage.setItem('gender', JSON.stringify('Female'));
   }
 
+  function goToIngredients(e) {
+    e.preventDefault();
+    navigate('/add-ingredient');
+  }
+
   return (
     <div>
+      <Navbar fixed='top' bg='primary' variant='dark'>
+        <Container>
+          <Navbar.Brand onClick={goHome}>FitNation</Navbar.Brand>
+          <Nav className='me-auto'>
+            <Nav.Link onClick={goHome}>Home</Nav.Link>
+            <Nav.Link onClick={goToIngredients}>Add ingredients</Nav.Link>
+            <Nav.Link onClick={goToProfile}>Profile</Nav.Link>
+            <Nav.Link onClick={handleLogout}>Log Out</Nav.Link>
+          </Nav>
+        </Container>
+      </Navbar>
       <Card>
         <Card.Body>
           <h2 className='text-center mb-4'>Set Profile</h2>
