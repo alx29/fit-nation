@@ -4,7 +4,7 @@ function ProfileElement(props) {
   
   function returnElement() {
     if ('email' in props) {
-      const aux = props.email.slice(1, props.email.length - 1);
+      const aux = props.email;
       return (
         <div className='mb-4'>
           <strong>Email:</strong> {aux}
@@ -56,6 +56,14 @@ function ProfileElement(props) {
       return (
         <div className='mb-4'>
           <strong>Last Name:</strong> {aux}
+        </div>
+      );
+    }
+    if ('bmr' in props) {
+      const aux = props.bmr;
+      return (
+        <div className='mb-4'>
+          <strong>BMR:</strong> {aux}
         </div>
       );
     }

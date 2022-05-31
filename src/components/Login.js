@@ -16,7 +16,27 @@ function Login() {
     setLoading(true);
     setError('');
     try {
-      await login(emailRef.current.value, passwordRef.current.value);
+      //await login(emailRef.current.value, passwordRef.current.value);
+      const requestLogin = {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          username: emailRef.current.value,
+          password: passwordRef.current.value,
+        }),
+      };
+      const res = await fetch(
+        'http://localhost:9001/login/signin',
+        requestLogin
+      );
+      const res1 = await res.json();
+      console.log(res1);
+      sessionStorage.setItem('jwt', res1['jwt']);
+      console.log(sessionStorage.getItem('jwt'));
       navigate('/profile');
     } catch {
       setError('Incorrect email or password');

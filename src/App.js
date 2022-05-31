@@ -5,6 +5,7 @@ import Profile from './components/Profile';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import AddIngredient from './components/AddIngredient';
+import Recipe from './components/Recipe';
 
 export default function App() {
 
@@ -21,6 +22,7 @@ export default function App() {
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/add-ingredient' element={<AddIngredient />} />
+            <Route path='/recipe' element={<Recipe />} />
           </Routes>
         </BrowserRouter>
       </div>

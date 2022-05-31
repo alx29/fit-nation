@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ListGroup, InputGroup, FormControl, Button, Card, Navbar, Nav, Container } from 'react-bootstrap';
+import { Alert, ListGroup, InputGroup, FormControl, Button, Card, Navbar, Nav, Container } from 'react-bootstrap';
 import Ingredient from './Ingredient';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../firebase'
@@ -16,6 +16,48 @@ function AddIngredient() {
     const newIngredients = [...ingredients, value];
     setValue('');
     setIngredients(newIngredients);
+  }
+
+  async function handleFinalSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      /*
+      const requestIngr = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          ingredients
+        ),
+      };
+      const ingr = await fetch(
+        'http://localhost:9005/fitzone/ingredients/create-meal',
+        requestIngr
+      );
+      const obj = await ingr.json();
+      console.log(obj);*/
+      const recipe = {
+        'title': 'Paste Carbonara',
+        'ingredients': ingredients,
+        'description': `Se fierb pastele în apă cu sare conform instrucțiunilor de pe pachet. 
+        Se limpezesc în jet de apă rece și se lasă la scurs.Baconul se taie cubulețe și se prăjește în 3 linguri de ulei, până se rumenește.
+        Smântâna se amestecă cu gălbenușurile, sare și piper. Se toarnă amestecul peste bacon și se mai fierbe un minut.
+        Se pun pastele peste sos și se amestecă.
+        Se servesc fierbinți cu parmezan ras.`,
+        'calories': '211.52 kcal',
+        'carbs': '11.11 g',
+        'proteins': '10.06 g',
+        'fat': '14.07 g'
+      }
+      sessionStorage.setItem('recipe', JSON.stringify(recipe));
+      navigate('/recipe');
+    } catch {
+      setError('Add Ingredient error');
+    }
+    setLoading(false);
   }
 
   function removeIngr(index) {
@@ -68,6 +110,7 @@ function AddIngredient() {
       </Navbar>
       <Card>
         <Card.Body>
+          {error && <Alert variant='danger'>{error}</Alert>}
           <InputGroup className='mb-3'>
             <FormControl
               value={value}
@@ -91,7 +134,9 @@ function AddIngredient() {
             ))}
           </ListGroup>
         </Card.Body>
-        <Button variant='primary'>Submit</Button>
+        <Button variant='primary' onClick={handleFinalSubmit} disabled={loading}>
+          Submit
+        </Button>
       </Card>
     </div>
   );

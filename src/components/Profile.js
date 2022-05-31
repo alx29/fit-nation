@@ -12,6 +12,7 @@ function Profile() {
   const gender = sessionStorage.getItem('gender');
   const firstName = sessionStorage.getItem('firstName');
   const lastName = sessionStorage.getItem('lastName');
+  const bmr = sessionStorage.getItem('bmr');
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -70,6 +71,7 @@ function Profile() {
           <ProfileElement firstName={firstName} />
           <ProfileElement lastName={lastName} />
           <ProfileElement email={email} />
+          <ProfileElement bmr={bmr} />
           <ProfileElement age={age} />
           <ProfileElement weight={weight} />
           <ProfileElement height={height} />

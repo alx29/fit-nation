@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react'
 import { Form, Button, Card, Alert } from 'react-bootstrap';
-import { signup } from '../firebase';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Signup() {
@@ -13,6 +12,16 @@ function Signup() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+
+  function updateSessionStorage() {
+    sessionStorage.setItem('email', emailRef.current.value);
+    sessionStorage.setItem('firstName', firstNameRef.current.value);
+    sessionStorage.setItem(
+      'lastName',
+      lastNameRef.current.value
+    );
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -20,10 +29,42 @@ function Signup() {
       return setError('Passwords do not match!');
     }
     setLoading(true);
+    setError('');
+    updateSessionStorage();
     try {
-      await signup(emailRef.current.value, passwordRef.current.value);
-      sessionStorage.setItem('firstName', firstNameRef.current.value);
-      sessionStorage.setItem('lastName', lastNameRef.current.value);
+      const requestSignUp = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: firstNameRef.current.value,
+          lastName: lastNameRef.current.value,
+          username: emailRef.current.value,
+          password: passwordRef.current.value,
+        }),
+      };
+      const obj = await fetch(
+        'http://localhost:9001/login/signup',
+        requestSignUp
+      );
+      console.log(obj);
+      
+      const requestLogIn = {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          username: emailRef.current.value,
+          password: passwordRef.current.value,
+        }),
+      };
+      const res = await fetch('http://localhost:9001/login/signin', requestLogIn);
+      console.log(res);
+      const res1 = await res.json();
+      sessionStorage.setItem('jwt', res1['jwt']);
+      console.log(sessionStorage.getItem('jwt'));
       navigate('/dashboard');
     } catch {
       setError('Sign Up Error');

@@ -1,11 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { Card, Button, Alert, Form, Navbar, Container, Nav } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebase';
 import { logout } from '../firebase';
 
 function Dashboard() {
-  const currentUser = auth.currentUser;
+  const currentEmail = sessionStorage.getItem('email');
+  const firstName = sessionStorage.getItem('firstName');
+  const lastName = sessionStorage.getItem('lastName');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ function Dashboard() {
   const heightRef = useRef();
   const ageRef = useRef();
   const [male, setMale] = useState(false);
+  const activityRef = useRef();
 
   function goHome(e) {
     e.preventDefault();
@@ -38,11 +40,35 @@ function Dashboard() {
     setLoading(false);
   }
 
-  function handleUpdateProfile(e) {
+  async function handleUpdateProfile(e) {
     e.preventDefault();
 
     setError("");
     setLoading(true);
+    const requestSetProfile = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': sessionStorage.getItem('jwt')
+      },
+      body: JSON.stringify({
+        name: firstName + ' ' + lastName,
+        username: currentEmail,
+        age: ageRef.current.value,
+        kilos: weightRef.current.value,
+        height: heightRef.current.value,
+        gender: male ? 'man' : 'women',
+        activityLevel: activityRef.current.value
+      }),
+    };
+    const obj = await fetch(
+      'http://localhost:9002/profile/set',
+      requestSetProfile
+    );
+    console.log(obj);
+    const obj2 = await obj.json();
+    console.log(obj2);
+    sessionStorage.setItem('bmr', obj2['bmr']);
     navigate('/profile');
     setLoading(false);
   }
@@ -56,7 +82,6 @@ function Dashboard() {
   }
 
   function useSessionStorage() {
-    sessionStorage.setItem('email', JSON.stringify(currentUser.email));
     sessionStorage.setItem('weight', JSON.stringify(weightRef.current.value));
     sessionStorage.setItem('height', JSON.stringify(heightRef.current.value));
     sessionStorage.setItem('age', JSON.stringify(ageRef.current.value));
@@ -89,7 +114,7 @@ function Dashboard() {
           <h2 className='text-center mb-4'>Set Profile</h2>
           {error && <Alert variant='danger'>{error}</Alert>}
           <div className='mb-4'>
-            <strong>Email:</strong> {currentUser.email}
+            <strong>Email:</strong> {currentEmail}
           </div>
           <Form onSubmit={handleUpdateProfile}>
             <Form.Group id='weight'>
@@ -104,6 +129,14 @@ function Dashboard() {
               <Form.Label>Age</Form.Label>
               <Form.Control type='text' ref={ageRef} required />
             </Form.Group>
+            <Form.Select ref={activityRef} className='mt-4' aria-label='Activity-level'>
+              <option>Activity-level</option>
+              <option value='1'>One</option>
+              <option value='2'>Two</option>
+              <option value='3'>Three</option>
+              <option value='4'>Four</option>
+              <option value='5'>Five</option>
+            </Form.Select>
             <div key={'inline-radio'} className='mt-4'>
               Gender:&nbsp;&nbsp;&nbsp;
               <Form.Check
